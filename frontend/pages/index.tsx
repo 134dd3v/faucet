@@ -97,7 +97,7 @@ export default function Home({
   return (
     <Layout>
       {/* CTA + description */}
-      <div className={styles.home__cta}>
+      {/* <div className={styles.home__cta}>
         <div>
           <a
             href="https://paradigm.xyz"
@@ -117,7 +117,7 @@ export default function Home({
           {`${networkCount} `}
           testnet networks, at once.
         </span>
-      </div>
+      </div> */}
 
       {/* Claim from facuet card */}
       <div className={styles.home__card}>
@@ -189,7 +189,7 @@ export default function Home({
                   />
 
                   {/* Other networks checkbox */}
-                  <div className={styles.content__unclaimed_others}>
+                  {/* <div className={styles.content__unclaimed_others}>
                     <input
                       type="checkbox"
                       value={claimOther.toString()}
@@ -199,7 +199,7 @@ export default function Home({
                       Drip on additional networks (besides Rinkeby, Ropsten,
                       Kovan, and Görli)
                     </label>
-                  </div>
+                  </div> */}
 
                   {isValidInput(address) ? (
                     // If address is valid, allow claiming
@@ -247,11 +247,11 @@ export default function Home({
               Your Twitter account must have at least 1 Tweet, 15 followers, and
               be older than 1 month.
             </p>
-            <p className={styles.home__card_content_section_lh}>
+            {/* <p className={styles.home__card_content_section_lh}>
               By default, the faucet drips on the Ethereum testnets (Rinkeby,
               Ropsten, Kovan, Görli). You can choose to receive a drip on other
               networks when requesting tokens.
-            </p>
+            </p> */}
             <p>You can claim from the faucet once every 24 hours.</p>
           </div>
         </div>

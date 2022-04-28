@@ -1,104 +1,108 @@
+import USDC_Arbtest from '@ragetrade/sdk/deployments/core/arbtest/SettlementToken.json'
+import WETH_Arbtest from '@ragetrade/sdk/deployments/vaults/arbtest/WETH.json'
+
 // Export faucet addresses
 export const ADDRESSES = [
+  // {
+  //   network: "ropsten",
+  //   depleted: false,
+  //   disclaimer: "Faucet drips 1 ETH, 1 wETH, and 5 NFTs (ERC721).",
+  //   etherscanPrefix: "ropsten.etherscan.io",
+  //   formattedName: "Ropsten",
+  //   addresses: {
+  //     NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
+  //     wETH: "0xc778417e063141139fce010982780140aa0cd5ab",
+  //   },
+  // },
+  // {
+  //   network: "kovan",
+  //   depleted: false,
+  //   disclaimer: "Faucet drips 1 ETH, 1 wETH, 500 DAI, and 5 NFTs (ERC721).",
+  //   etherscanPrefix: "kovan.etherscan.io",
+  //   formattedName: "Kovan",
+  //   addresses: {
+  //     NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
+  //     wETH: "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
+  //     DAI: "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa",
+  //   },
+  // },
+  // {
+  //   network: "rinkeby",
+  //   disclaimer: "Faucet drips 0.1 ETH, 0.1 wETH, 10 DAI, and 5 NFTs (ERC721).",
+  //   etherscanPrefix: "rinkeby.etherscan.io",
+  //   formattedName: "Rinkeby",
+  //   addresses: {
+  //     NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
+  //     wETH: "0xc778417E063141139Fce010982780140Aa0cD5Ab",
+  //     DAI: "0x6A9865aDE2B6207dAAC49f8bCba9705dEB0B0e6D",
+  //   },
+  // },
+  // {
+  //   network: "goerli",
+  //   depleted: false,
+  //   disclaimer: "Faucet drips 1 ETH, 1 wETH, and 5 NFTs (ERC721).",
+  //   etherscanPrefix: "goerli.etherscan.io",
+  //   formattedName: "Görli",
+  //   addresses: {
+  //     NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
+  //     wETH: "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6",
+  //   },
+  // },
+  // {
+  //   network: "kovan-optimistic",
+  //   depleted: false,
+  //   disclaimer: "Faucet drips 1 ETH, 1 wETH, 500 DAI, and 5 NFTs (ERC721).",
+  //   etherscanPrefix: "kovan-optimistic.etherscan.io",
+  //   formattedName: "Optimistic Kovan",
+  //   connectionDetails:
+  //     "https://community.optimism.io/docs/useful-tools/networks/#optimism-kovan-testnet",
+  //   autoconnect: {
+  //     chainId: "0x45",
+  //     chainName: "Optimistic Kovan",
+  //     nativeCurrency: {
+  //       name: "Ethereum",
+  //       symbol: "ETH",
+  //       decimals: 18,
+  //     },
+  //     rpcUrls: ["https://kovan.optimism.io"],
+  //     blockExplorerUrls: ["https://kovan-optimistic.etherscan.io/"],
+  //   },
+  //   addresses: {
+  //     NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
+  //     wETH: "0xbc6f6b680bc61e30db47721c6d1c5cde19c1300d",
+  //     DAI: "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+  //   },
+  // },
+  // {
+  //   network: "mumbai",
+  //   depleted: false,
+  //   disclaimer:
+  //     "Faucet drips 0.1 MATIC, 0.1 wMATIC, 500 DAI, and 5 NFTs (ERC721).",
+  //   etherscanPrefix: "mumbai.polygonscan.com",
+  //   formattedName: "Polygon Mumbai",
+  //   connectionDetails:
+  //     "https://blog.pods.finance/guide-connecting-mumbai-testnet-to-your-metamask-87978071aca8",
+  //   autoconnect: {
+  //     chainId: "0x13881",
+  //     chainName: "Polygon Mumbai",
+  //     nativeCurrency: {
+  //       name: "MATIC",
+  //       symbol: "MATIC",
+  //       decimals: 18,
+  //     },
+  //     rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
+  //     blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+  //   },
+  //   addresses: {
+  //     NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
+  //     wETH: "0x9c3c9283d3e44854697cd22d3faa240cfb032889",
+  //     DAI: "0x001b3b4d0f3714ca98ba10f6042daebf0b1b7b6f",
+  //   },
+  // },
   {
-    network: "ropsten",
     depleted: false,
-    disclaimer: "Faucet drips 1 ETH, 1 wETH, and 5 NFTs (ERC721).",
-    etherscanPrefix: "ropsten.etherscan.io",
-    formattedName: "Ropsten",
-    addresses: {
-      NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
-      wETH: "0xc778417e063141139fce010982780140aa0cd5ab",
-    },
-  },
-  {
-    network: "kovan",
-    depleted: false,
-    disclaimer: "Faucet drips 1 ETH, 1 wETH, 500 DAI, and 5 NFTs (ERC721).",
-    etherscanPrefix: "kovan.etherscan.io",
-    formattedName: "Kovan",
-    addresses: {
-      NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
-      wETH: "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
-      DAI: "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa",
-    },
-  },
-  {
-    network: "rinkeby",
-    disclaimer: "Faucet drips 0.1 ETH, 0.1 wETH, 10 DAI, and 5 NFTs (ERC721).",
-    etherscanPrefix: "rinkeby.etherscan.io",
-    formattedName: "Rinkeby",
-    addresses: {
-      NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
-      wETH: "0xc778417E063141139Fce010982780140Aa0cD5Ab",
-      DAI: "0x6A9865aDE2B6207dAAC49f8bCba9705dEB0B0e6D",
-    },
-  },
-  {
-    network: "goerli",
-    depleted: false,
-    disclaimer: "Faucet drips 1 ETH, 1 wETH, and 5 NFTs (ERC721).",
-    etherscanPrefix: "goerli.etherscan.io",
-    formattedName: "Görli",
-    addresses: {
-      NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
-      wETH: "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6",
-    },
-  },
-  {
-    network: "kovan-optimistic",
-    depleted: false,
-    disclaimer: "Faucet drips 1 ETH, 1 wETH, 500 DAI, and 5 NFTs (ERC721).",
-    etherscanPrefix: "kovan-optimistic.etherscan.io",
-    formattedName: "Optimistic Kovan",
-    connectionDetails:
-      "https://community.optimism.io/docs/useful-tools/networks/#optimism-kovan-testnet",
-    autoconnect: {
-      chainId: "0x45",
-      chainName: "Optimistic Kovan",
-      nativeCurrency: {
-        name: "Ethereum",
-        symbol: "ETH",
-        decimals: 18,
-      },
-      rpcUrls: ["https://kovan.optimism.io"],
-      blockExplorerUrls: ["https://kovan-optimistic.etherscan.io/"],
-    },
-    addresses: {
-      NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
-      wETH: "0xbc6f6b680bc61e30db47721c6d1c5cde19c1300d",
-      DAI: "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
-    },
-  },
-  {
-    network: "mumbai",
-    depleted: false,
-    disclaimer:
-      "Faucet drips 0.1 MATIC, 0.1 wMATIC, 500 DAI, and 5 NFTs (ERC721).",
-    etherscanPrefix: "mumbai.polygonscan.com",
-    formattedName: "Polygon Mumbai",
-    connectionDetails:
-      "https://blog.pods.finance/guide-connecting-mumbai-testnet-to-your-metamask-87978071aca8",
-    autoconnect: {
-      chainId: "0x13881",
-      chainName: "Polygon Mumbai",
-      nativeCurrency: {
-        name: "MATIC",
-        symbol: "MATIC",
-        decimals: 18,
-      },
-      rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
-      blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
-    },
-    addresses: {
-      NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
-      wETH: "0x9c3c9283d3e44854697cd22d3faa240cfb032889",
-      DAI: "0x001b3b4d0f3714ca98ba10f6042daebf0b1b7b6f",
-    },
-  },
-  {
     network: "arb-rinkeby",
-    disclaimer: "Faucet drips 0.1 ETH, 0.1 wETH, 10 DAI, and 5 NFTs (ERC721).",
+    disclaimer: "Faucet drips 0.05 ETH, 1 wETH, 100,000 USDC.",
     etherscanPrefix: "testnet.arbiscan.io",
     formattedName: "Arbitrum Rinkeby",
     connectionDetails: "https://developer.offchainlabs.com/docs/public_testnet",
@@ -114,62 +118,61 @@ export const ADDRESSES = [
       blockExplorerUrls: ["https://testnet.arbiscan.io/"],
     },
     addresses: {
-      NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
-      wETH: "0xebbc3452cc911591e4f18f3b36727df45d6bd1f9",
-      DAI: "0x2f3c1b6a51a469051a22986aa0ddf98466cc8d3c",
+      wETH: WETH_Arbtest.address,
+      USDC: USDC_Arbtest.address,
     },
   },
-  {
-    network: "avalanche-fuji",
-    depleted: true,
-    disclaimer:
-      "Faucet drips 0.1 AVAX, 0.1 wAVAX, 500 DAI, and 5 NFTs (ERC721).",
-    etherscanPrefix: "testnet.snowtrace.io",
-    formattedName: "Avalanche Fuji",
-    connectionDetails:
-      "https://docs.avax.network/build/tutorials/smart-contracts/deploy-a-smart-contract-on-avalanche-using-remix-and-metamask#step-1-setting-up-metamask",
-    autoconnect: {
-      chainId: "0xa869",
-      chainName: "Avalanche FUJI C-Chain",
-      nativeCurrency: {
-        name: "Avalanche",
-        symbol: "AVAX",
-        decimals: 18,
-      },
-      rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
-      blockExplorerUrls: ["https://testnet.snowtrace.io/"],
-    },
-    addresses: {
-      NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
-      wETH: "0xd00ae08403b9bbb9124bb305c09058e32c39a48c",
-      DAI: "0xebbc3452cc911591e4f18f3b36727df45d6bd1f9",
-    },
-  },
-  {
-    network: "moonbase-alpha",
-    depleted: false,
-    disclaimer: "Faucet drips 1 DEV, 1 wDEV, 500 DAI, and 5 NFTs (ERC721).",
-    etherscanPrefix: "moonbase.moonscan.io",
-    formattedName: "Moonbase Alpha",
-    connectionDetails:
-      "https://docs.moonbeam.network/learn/platform/networks/moonbase/",
-    autoconnect: {
-      chainId: "0x507",
-      chainName: "Moonbase Alpha",
-      nativeCurrency: {
-        name: "Dev",
-        symbol: "DEV",
-        decimals: 18,
-      },
-      rpcUrls: ["https://rpc.api.moonbase.moonbeam.network"],
-      blockExplorerUrls: ["https://moonbase.moonscan.io/"],
-    },
-    addresses: {
-      NFTs: "0xf5de760f2e916647fd766B4AD9E85ff943cE3A2b",
-      wETH: "0xD909178CC99d318e4D46e7E66a972955859670E1",
-      DAI: "0x4C153BFaD26628BdbaFECBCD160A0790b1b8F212",
-    },
-  },
+  // {
+  //   network: "avalanche-fuji",
+  //   depleted: true,
+  //   disclaimer:
+  //     "Faucet drips 0.1 AVAX, 0.1 wAVAX, 500 DAI, and 5 NFTs (ERC721).",
+  //   etherscanPrefix: "testnet.snowtrace.io",
+  //   formattedName: "Avalanche Fuji",
+  //   connectionDetails:
+  //     "https://docs.avax.network/build/tutorials/smart-contracts/deploy-a-smart-contract-on-avalanche-using-remix-and-metamask#step-1-setting-up-metamask",
+  //   autoconnect: {
+  //     chainId: "0xa869",
+  //     chainName: "Avalanche FUJI C-Chain",
+  //     nativeCurrency: {
+  //       name: "Avalanche",
+  //       symbol: "AVAX",
+  //       decimals: 18,
+  //     },
+  //     rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
+  //     blockExplorerUrls: ["https://testnet.snowtrace.io/"],
+  //   },
+  //   addresses: {
+  //     NFTs: "0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b",
+  //     wETH: "0xd00ae08403b9bbb9124bb305c09058e32c39a48c",
+  //     DAI: "0xebbc3452cc911591e4f18f3b36727df45d6bd1f9",
+  //   },
+  // },
+  // {
+  //   network: "moonbase-alpha",
+  //   depleted: false,
+  //   disclaimer: "Faucet drips 1 DEV, 1 wDEV, 500 DAI, and 5 NFTs (ERC721).",
+  //   etherscanPrefix: "moonbase.moonscan.io",
+  //   formattedName: "Moonbase Alpha",
+  //   connectionDetails:
+  //     "https://docs.moonbeam.network/learn/platform/networks/moonbase/",
+  //   autoconnect: {
+  //     chainId: "0x507",
+  //     chainName: "Moonbase Alpha",
+  //     nativeCurrency: {
+  //       name: "Dev",
+  //       symbol: "DEV",
+  //       decimals: 18,
+  //     },
+  //     rpcUrls: ["https://rpc.api.moonbase.moonbeam.network"],
+  //     blockExplorerUrls: ["https://moonbase.moonscan.io/"],
+  //   },
+  //   addresses: {
+  //     NFTs: "0xf5de760f2e916647fd766B4AD9E85ff943cE3A2b",
+  //     wETH: "0xD909178CC99d318e4D46e7E66a972955859670E1",
+  //     DAI: "0x4C153BFaD26628BdbaFECBCD160A0790b1b8F212",
+  //   },
+  // },
 ];
 
 /**

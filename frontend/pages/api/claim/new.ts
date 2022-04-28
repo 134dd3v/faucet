@@ -6,6 +6,8 @@ import parseTwitterDate from "utils/dates"; // Parse Twitter dates
 import { getSession } from "next-auth/client"; // Session management
 import { hasClaimed } from "pages/api/claim/status"; // Claim status
 import type { NextApiRequest, NextApiResponse } from "next"; // Types
+import { getVaultContracts, parseUsdc } from "@ragetrade/sdk";
+import { parseEther } from "ethers/lib/utils";
 
 // Setup whitelist (Anish)
 const whitelist: string[] = ["1078014622525988864"];
@@ -21,12 +23,13 @@ const slackChannel: string = process.env.SLACK_CHANNEL ?? "";
  * @param {string} message to post
  */
 async function postSlackMessage(message: string): Promise<void> {
-  await slack.chat.postMessage({
-    channel: slackChannel,
-    text: message,
-    // Ping user on error
-    link_names: true,
-  });
+  // Temporarily disabled posting of slack messages
+  // await slack.chat.postMessage({
+  //   channel: slackChannel,
+  //   text: message,
+  //   // Ping user on error
+  //   link_names: true,
+  // });
 }
 
 /**
@@ -118,7 +121,8 @@ async function getNonceByNetwork(network: number): Promise<number> {
 async function processDrip(
   wallet: ethers.Wallet,
   network: number,
-  data: string
+  data: string,
+  addr: string
 ): Promise<void> {
   // Collect provider
   const provider = getProviderByNetwork(network);
@@ -130,21 +134,48 @@ async function processDrip(
   // Collect gas price * 2 for network
   const gasPrice = (await provider.getGasPrice()).mul(2);
 
+  const gasLimit = network === ARBITRUM ? 5_000_000 : 500_000;
+
   // Update nonce for network in redis w/ 5m ttl
-  await client.set(`nonce-${network}`, nonce + 1, "EX", 300);
+  await client.set(`nonce-${network}`, nonce + 4, "EX", 300);
 
   // Return populated transaction
   try {
-    await rpcWallet.sendTransaction({
-      to: process.env.FAUCET_ADDRESS ?? "",
-      from: wallet.address,
+    // await rpcWallet.sendTransaction({
+    //   to: process.env.FAUCET_ADDRESS ?? "",
+    //   from: wallet.address,
+    //   gasPrice,
+    //   // Custom gas override for Arbitrum w/ min gas limit
+    //   gasLimit: network === ARBITRUM ? 5_000_000 : 500_000,
+    //   data,
+    //   nonce,
+    //   type: 0,
+    // });
+
+    const { curveTriCryptoLpToken, usdc, usdt, weth } = await getVaultContracts(
+      rpcWallet
+    );
+
+    
+    await usdc.mint(addr, parseUsdc("100000"), {
+      nonce: nonce + 0,
       gasPrice,
-      // Custom gas override for Arbitrum w/ min gas limit
-      gasLimit: network === ARBITRUM ? 5_000_000 : 500_000,
-      data,
-      nonce,
-      type: 0,
     });
+    await usdt.mint(addr, parseUsdc("100000"), {
+      nonce: nonce + 1,
+      gasPrice,
+    });
+    await weth.mint(addr, parseUsdc("1"), {
+      nonce: nonce + 2,
+      gasPrice,
+    });
+    await rpcWallet.sendTransaction({
+      to: addr,
+      value: parseEther('0.01'),
+      gasPrice, 
+      gasLimit,
+      nonce: nonce + 3
+    })
   } catch (e) {
     console.log(e);
     await postSlackMessage(
@@ -236,10 +267,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   };
 
   // For each main network
-  for (const networkId of Object.keys(claimNetworks)) {
+  // for (const networkId of Object.keys(claimNetworks)) {
     try {
-      // Process faucet claims
-      await processDrip(wallet, Number(networkId), data);
+      // Process faucet claims for Arbitrum Testnet 
+      await processDrip(wallet, 421611, data, addr);
     } catch (e) {
       // If not whitelisted, force user to wait 15 minutes
       if (!whitelist.includes(session.twitter_id)) {
@@ -252,7 +283,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         .status(500)
         .send({ error: "Error fully claiming, try again in 15 minutes." });
     }
-  }
+  // }
 
   // If not whitelisted
   if (!whitelist.includes(session.twitter_id)) {
