@@ -16,7 +16,7 @@ export default function Layout({
       <div className={styles.layout__content}>{children}</div>
 
       {/* Footer */}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
@@ -38,17 +38,17 @@ function Head() {
       />
 
       {/* Favicon */}
-      <link rel="shortcut icon" href="/favicon.ico" />
+      <link rel="shortcut icon" href="/favicon2.ico" />
 
       {/* Primary Meta Tags */}
-      <title>Paradigm MultiFaucet | Bootstrap your testnet wallet</title>
+      <title>RageTrade Faucet | Bootstrap your testnet wallet</title>
       <meta
         name="title"
-        content="Paradigm MultiFaucet | Bootstrap your testnet wallet"
+        content="RageTrade Faucet | Bootstrap your testnet wallet"
       />
       <meta
         name="description"
-        content="MultiFaucet funds a wallet with ETH, wETH, DAI, and NFTs across 8 testnet networks, at once."
+        content="MultiFaucet funds a wallet."
       />
 
       {/* OG + Facebook */}
@@ -56,11 +56,11 @@ function Head() {
       <meta property="og:url" content="https://faucet.paradigm.xyz" />
       <meta
         property="og:title"
-        content="Paradigm MultiFaucet | Bootstrap your testnet wallet"
+        content="RageTrade Faucet | Bootstrap your testnet wallet"
       />
       <meta
         property="og:description"
-        content="MultiFaucet funds a wallet with ETH, wETH, DAI, and NFTs across 8 testnet networks, at once."
+        content="MultiFaucet funds a wallet."
       />
       <meta
         property="og:image"
@@ -72,11 +72,11 @@ function Head() {
       <meta property="twitter:url" content="https://faucet.paradigm.xyz" />
       <meta
         property="twitter:title"
-        content="Paradigm MultiFaucet | Bootstrap your testnet wallet"
+        content="RageTrade Faucet | Bootstrap your testnet wallet"
       />
       <meta
         property="twitter:description"
-        content="MultiFaucet funds a wallet with ETH, wETH, DAI, and NFTs across 8 testnet networks, at once."
+        content="This faucet funds a wallet."
       />
       <meta
         property="twitter:image"
