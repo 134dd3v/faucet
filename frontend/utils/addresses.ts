@@ -1,5 +1,7 @@
-import USDC_Arbtest from '@ragetrade/sdk/deployments/core/arbtest/SettlementToken.json'
-import WETH_Arbtest from '@ragetrade/sdk/deployments/vaults/arbtest/WETH.json'
+import USDC_Arbtest from "@ragetrade/sdk/deployments/core/arbtest/SettlementToken.json";
+import USDT_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/USDT.json";
+import WETH_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/WETH.json";
+import WBTC_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/WBTC.json";
 
 // Export faucet addresses
 export const ADDRESSES = [
@@ -102,7 +104,7 @@ export const ADDRESSES = [
   {
     depleted: false,
     network: "arb-rinkeby",
-    disclaimer: "Faucet drips 0.05 ETH, 1 wETH, 100,000 USDC.",
+    disclaimer: "Faucet drips 0.02 ETH, 1M USDC, 1M USDT, 300 wETH, 25 wBTC.",
     etherscanPrefix: "testnet.arbiscan.io",
     formattedName: "Arbitrum Rinkeby",
     connectionDetails: "https://developer.offchainlabs.com/docs/public_testnet",
@@ -118,8 +120,10 @@ export const ADDRESSES = [
       blockExplorerUrls: ["https://testnet.arbiscan.io/"],
     },
     addresses: {
-      wETH: WETH_Arbtest.address,
       USDC: USDC_Arbtest.address,
+      USDT: USDT_Arbtest.address,
+      wETH: WETH_Arbtest.address,
+      wBTC: WBTC_Arbtest.address,
     },
   },
   // {
