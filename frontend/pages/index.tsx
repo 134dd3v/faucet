@@ -145,14 +145,12 @@ export default function Home({
               </p>
 
               {/* Sign in with Twitter */}
-              <div className={styles.button__wrapper}>
                 <button
                   className={styles.button__main}
                   onClick={() => signIn("twitter")}
                 >
                   Sign In with Twitter
                 </button>
-              </div>
             </div>
           ) : (
             // If user is authenticated:
