@@ -13,17 +13,17 @@
 
   > h1 {
     font-size: 2.5rem;
-    color: #19232d;
+    color: white;
     margin: 10px 0px;
   }
 
   > span {
     display: block;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 28px;
     max-width: 500px;
     margin: 0px auto;
-    color: #19232d;
+    color: #0a6dcf;
   }
 }
 
@@ -32,8 +32,9 @@
   padding: 0px;
   background-color: transparent;
   border: none;
+  color: #8f7df8;
   margin-left: 2px;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 16px;
   text-decoration: underline;
   cursor: pointer;
@@ -50,8 +51,8 @@
     font-size: 85%;
     text-decoration: none;
     border-radius: 6px;
-    color: inherit;
-    background-color: rgba(175, 184, 193, 0.2);
+    color: #131118;
+    background-color: #d7d5e0;
 
     &:hover {
       opacity: 0.8;
@@ -61,10 +62,10 @@
   > button {
     padding: 0.2em 0.4em;
     margin-left: 10px;
-    background-color: rgba(175, 184, 193, 0.2);
+    background-color: #8c7afb;
     border: none;
     border-radius: 6px;
-    color: inherit;
+    color: #161516;
     cursor: pointer;
 
     &:hover {
@@ -90,26 +91,24 @@
 
   span {
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
   }
 }
 
 // Claim card
 .home__card {
   margin-top: 40px;
-  background-color: white;
-  border: 1px solid rgb(236, 237, 239);
+  background-color: #1e1c27;
   border-radius: 5px;
-  box-shadow: 0px 6px 10px 1px #eeeeee;
 
   .home__card_title {
-    border-bottom: 2px solid rgb(237, 238, 240);
+    border-bottom: 2px solid #2e2a3b;
     padding: 15px 20px;
 
     > h3 {
       margin: 0px;
-      font-weight: 500;
-      font-size: 18px;
+      font-weight: 600;
+      font-size: 16px;
       transform: translateY(1px);
     }
   }
@@ -125,10 +124,9 @@
 
 .home__card_content_section {
   padding: 20px;
-  border-bottom: 1px solid rgb(237, 238, 240);
 
   > h4 {
-    font-weight: 500;
+    font-weight: 400;
     font-size: 16px;
     margin: 0px;
 
@@ -149,13 +147,13 @@
 
   > span {
     display: block;
-    color: #6e7a85;
+    color: #0ecb80;
     font-size: 14px;
-    margin: 2px 0px;
+    margin: 4px 0px;
   }
 
   > p {
-    color: #19232d;
+    color: #efeef3;
     margin: 10px 0px;
 
     &:nth-last-of-type(1) {
@@ -166,7 +164,7 @@
 
 // Depleted section
 .home__card_depleted {
-  color: #e74747;
+  color: #f46363;
 }
 
 // Twitter sign-out button
@@ -280,13 +278,21 @@
   }
 }
 
+.button__wrapper{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
 // Main blue button
 .button__main {
-  width: 100%;
-  margin-top: 20px;
-  background-color: rgb(25, 35, 45);
+  background-image: linear-gradient(
+    101.26deg,
+    #70ffde -10.57%,
+    #5c6db7 32.73%,
+    #4c009a
+  );
   color: white;
-  padding: 10px 0px;
+  padding: 10px 30px;
   border-radius: 5px;
   border: none;
   font-size: 15px;
@@ -294,12 +300,12 @@
   transition: 100ms ease-in-out;
 
   &:hover {
-    opacity: 0.9;
+    background-image: linear-gradient(90deg, #2a666d, #300a55);
   }
 
   &:disabled {
-    background-color: rgb(220, 230, 240);
-    color: #19232d;
+    color: #B0ABC2;
+    background: #3D384E;
     cursor: not-allowed;
   }
 
