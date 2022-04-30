@@ -1,6 +1,5 @@
 // Background colors
-$bg-color: rgb(246, 246, 247);
-$bg-dot-color: rgb(203, 203, 205);
+$bg-color: #131118;
 
 // Background dimensions
 $dot-size: 2px;
@@ -9,6 +8,7 @@ $dot-space: 30px;
 html {
   // Scroll background
   background-color: $bg-color;
+  color: white;
 }
 
 body {
@@ -24,16 +24,6 @@ body {
   // Background
   min-height: 100vh;
   min-width: 100vw;
-  background-color: rgb(246, 246, 247);
-  background: linear-gradient(
-        90deg,
-        $bg-color ($dot-space - $dot-size),
-        transparent 1%
-      )
-      center,
-    linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
-    $bg-dot-color;
-  background-size: $dot-space $dot-space;
 }
 
 button,
