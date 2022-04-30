@@ -23,7 +23,7 @@
     line-height: 28px;
     max-width: 500px;
     margin: 0px auto;
-    color: #0a6dcf;
+    color: #84ACEE;
   }
 }
 
@@ -34,7 +34,6 @@
   border: none;
   color: #8f7df8;
   margin-left: 2px;
-  font-weight: 400;
   font-size: 16px;
   text-decoration: underline;
   cursor: pointer;
@@ -51,8 +50,8 @@
     font-size: 85%;
     text-decoration: none;
     border-radius: 6px;
-    color: #131118;
-    background-color: #d7d5e0;
+    color: #f0eaff;
+    background-color: #4b4660;
 
     &:hover {
       opacity: 0.8;
@@ -76,9 +75,7 @@
 
 // Individual token containers
 .token {
-  background-color: white;
   padding: 0px 5px;
-  border: 1px solid rgb(236, 237, 239);
   border-radius: 4px;
   display: inline-flex;
   vertical-align: middle;
@@ -91,24 +88,24 @@
 
   span {
     font-size: 16px;
-    font-weight: 400;
   }
 }
 
 // Claim card
 .home__card {
   margin-top: 40px;
-  background-color: #1e1c27;
-  border-radius: 5px;
+  padding-bottom: 10px;
+  border: 1px solid rgb(143 125 248/0.2);
+  border-radius: 8px;
 
   .home__card_title {
-    border-bottom: 2px solid #2e2a3b;
+    border-bottom: 1px solid rgba(14, 125, 248,0.2);
     padding: 15px 20px;
 
     > h3 {
       margin: 0px;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 18px;
       transform: translateY(1px);
     }
   }
@@ -126,7 +123,7 @@
   padding: 20px;
 
   > h4 {
-    font-weight: 400;
+    font-weight: 500;
     font-size: 16px;
     margin: 0px;
 
@@ -149,7 +146,7 @@
     display: block;
     color: #0ecb80;
     font-size: 14px;
-    margin: 4px 0px;
+    margin: 6px 0px;
   }
 
   > p {
@@ -278,7 +275,7 @@
   }
 }
 
-.button__wrapper{
+.button__wrapper {
   display: flex;
   justify-content: center;
   margin-top: 20px;
@@ -304,8 +301,8 @@
   }
 
   &:disabled {
-    color: #B0ABC2;
-    background: #3D384E;
+    color: #b0abc2;
+    background: #3d384e;
     cursor: not-allowed;
   }
 
