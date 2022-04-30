@@ -23,7 +23,7 @@
     line-height: 28px;
     max-width: 500px;
     margin: 0px auto;
-    color: #84ACEE;
+    color: #84acee;
   }
 }
 
@@ -99,7 +99,7 @@
   border-radius: 8px;
 
   .home__card_title {
-    border-bottom: 1px solid rgba(14, 125, 248,0.2);
+    border-bottom: 1px solid rgba(14, 125, 248, 0.2);
     padding: 15px 20px;
 
     > h3 {
@@ -148,17 +148,16 @@
     font-size: 14px;
     margin: 6px 0px;
   }
-
-  > p {
-    color: #efeef3;
-    margin: 10px 0px;
-
-    &:nth-last-of-type(1) {
-      margin-bottom: 0px;
-    }
-  }
 }
 
+.token_address_entry {
+  color: #efeef3;
+  margin: 10px 0px;
+
+  &:nth-last-of-type(1) {
+    margin-bottom: 0px;
+  }
+}
 // Depleted section
 .home__card_depleted {
   color: #f46363;
