@@ -302,7 +302,7 @@ export default function Home({
                   // For each network address
                   return (
                     // Address description: address
-                    <p key={name}>
+                    <div key={name} className={styles.token_address_entry}>
                       <TokenLogo name={name} imageSrc={`/tokens/${name.toLowerCase()}.png`}/>
                       {" - "}
                       <TokenAddress
@@ -311,7 +311,7 @@ export default function Home({
                         address={address}
                         ERC20={name != "NFTs"}
                       />
-                    </p>
+                    </div>
                   );
                 })}
               </div>
