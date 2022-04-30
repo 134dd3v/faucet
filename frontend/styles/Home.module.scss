@@ -200,13 +200,14 @@
   input {
     display: block;
     width: calc(100% - 14px);
-    border: 2px solid #8F7DF8;
+    border: 2px solid #8f7df8;
     font-size: 16px;
     padding: 10px 5px;
     border-radius: 5px;
     margin: 20px 0px 10px 0px;
 
     &:disabled {
+      border: 2px solid #3d3568;
       cursor: not-allowed;
     }
   }
