@@ -97,27 +97,26 @@ export default function Home({
   return (
     <Layout>
       {/* CTA + description */}
-      {/* <div className={styles.home__cta}>
+      <div className={styles.home__cta}>
         <div>
           <a
-            href="https://paradigm.xyz"
+            href="https://rage.trade"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Image src="/logo.svg" height="42.88px" width="180px" />
+            <img src="/rage_trade_logo.png" width="245" height="133" />
           </a>
         </div>
-        <h1>Bootstrap your testnet wallet</h1>
         <span>
-          MultiFaucet funds a wallet with{" "}
-          <TokenLogo name="ETH" imageSrc="/tokens/eth.png" />
+          Faucet funds a wallet with{" "}
+          <TokenLogo name="ETH" imageSrc="/tokens/eth.png" />,
+          <TokenLogo name="USDC" imageSrc="/tokens/usdc.png" />, and{" "}
+          <TokenLogo name="USDT" imageSrc="/tokens/usdt.png" />
           , <TokenLogo name="wETH" imageSrc="/tokens/weth.png" />,
-          <TokenLogo name="DAI" imageSrc="/tokens/dai.svg" />, and{" "}
-          <TokenLogo name="NFTs" imageSrc="/tokens/punks.png" /> across{" "}
-          {`${networkCount} `}
-          testnet networks, at once.
+          <TokenLogo name="wBTC" imageSrc="/tokens/wbtc.png" /> on{" "}
+          Arbitrum Rinkeby.
         </span>
-      </div> */}
+      </div>
 
       {/* Claim from facuet card */}
       <div className={styles.home__card}>
@@ -304,7 +303,8 @@ export default function Home({
                   return (
                     // Address description: address
                     <p key={name}>
-                      {name}:{" "}
+                      <TokenLogo name={name} imageSrc={`/tokens/${name.toLowerCase()}.png`}/>
+                      {" - "}
                       <TokenAddress
                         etherscanPrefix={network.etherscanPrefix}
                         name={name}

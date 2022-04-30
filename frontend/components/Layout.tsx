@@ -58,7 +58,7 @@ function Footer() {
         safety or correctness of the user interface or the smart contracts. They
         have not been audited and as such there can be no assurance they will
         work as intended, and users may experience delays, failures, errors,
-        omissions or loss of transmitted information. Paradigm is not liable for
+        omissions or loss of transmitted information. Rage Trade is not liable for
         any of the foregoing. Users should proceed with caution and use at their
         own risk.
       </p>
