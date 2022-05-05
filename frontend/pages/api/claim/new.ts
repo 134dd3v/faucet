@@ -142,7 +142,7 @@ async function processDrip(
   const gasLimit = network === ARBITRUM ? 5_000_000 : 500_000;
 
   // Update nonce for network in redis w/ 5m ttl
-  await client.set(`nonce-${network}`, nonce + 5, "EX", 300);
+  await client.set(`nonce-${network}`, nonce + 6, "EX", 300);
 
   // Return populated transaction
   try {
@@ -163,7 +163,7 @@ async function processDrip(
       rpcWallet
     );
 
-    const { wbtc, usdt, weth } = await getVaultContracts(rpcWallet);
+    const { wbtc, usdt, weth, curveTriCryptoLpToken } = await getVaultContracts(rpcWallet);
 
     await usdc.mint(addr, parseUsdc("1000000"), {
       nonce: nonce + 0,
@@ -185,12 +185,17 @@ async function processDrip(
       gasPrice,
     });
 
+    await curveTriCryptoLpToken.transfer(addr, parseUnits("10000", 18), {
+      nonce: nonce + 4,
+      gasPrice,
+    });
+
     await rpcWallet.sendTransaction({
       to: addr,
       value: parseEther("0.02"),
       gasPrice,
       gasLimit,
-      nonce: nonce + 4,
+      nonce: nonce + 5,
     });
   } catch (e) {
     console.log(e);

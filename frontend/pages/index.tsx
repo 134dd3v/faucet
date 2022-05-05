@@ -166,7 +166,7 @@ export default function Home({
 
                   <input
                     type="text"
-                    placeholder="0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B"
+                    placeholder="0x123456789ABcdEf0123456789aBCDeF123456789"
                     disabled
                   />
                   <button className={styles.button__main} disabled>
@@ -182,7 +182,7 @@ export default function Home({
                   {/* Address input */}
                   <input
                     type="text"
-                    placeholder="0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B"
+                    placeholder="0x123456789ABcdEf0123456789aBCDeF123456789"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                   />

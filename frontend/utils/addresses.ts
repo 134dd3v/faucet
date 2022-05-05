@@ -2,6 +2,7 @@ import USDC_Arbtest from "@ragetrade/sdk/deployments/core/arbtest/SettlementToke
 import USDT_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/USDT.json";
 import WETH_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/WETH.json";
 import WBTC_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/WBTC.json";
+import Curve3Crypto_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/CurveTriCryptoLpToken.json";
 
 // Export faucet addresses
 export const ADDRESSES = [
@@ -124,6 +125,7 @@ export const ADDRESSES = [
       USDT: USDT_Arbtest.address,
       wETH: WETH_Arbtest.address,
       wBTC: WBTC_Arbtest.address,
+      crv3crypto: Curve3Crypto_Arbtest.address,
     },
     decimals: {
       USDC: 6,
