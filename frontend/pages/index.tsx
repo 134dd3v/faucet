@@ -113,8 +113,8 @@ export default function Home({
           <TokenLogo name="USDC" imageSrc="/tokens/usdc.png" />, and{" "}
           <TokenLogo name="USDT" imageSrc="/tokens/usdt.png" />
           , <TokenLogo name="wETH" imageSrc="/tokens/weth.png" />,
-          <TokenLogo name="wBTC" imageSrc="/tokens/wbtc.png" /> on{" "}
-          Arbitrum Rinkeby.
+          <TokenLogo name="wBTC" imageSrc="/tokens/wbtc.png" /> on Arbitrum
+          Rinkeby.
         </span>
       </div>
 
@@ -145,12 +145,12 @@ export default function Home({
               </p>
 
               {/* Sign in with Twitter */}
-                <button
-                  className={styles.button__main}
-                  onClick={() => signIn("twitter")}
-                >
-                  Sign In with Twitter
-                </button>
+              <button
+                className={styles.button__main}
+                onClick={() => signIn("twitter")}
+              >
+                Sign In with Twitter
+              </button>
             </div>
           ) : (
             // If user is authenticated:
@@ -301,12 +301,16 @@ export default function Home({
                   return (
                     // Address description: address
                     <div key={name} className={styles.token_address_entry}>
-                      <TokenLogo name={name} imageSrc={`/tokens/${name.toLowerCase()}.png`}/>
+                      <TokenLogo
+                        name={name}
+                        imageSrc={`/tokens/${name.toLowerCase()}.png`}
+                      />
                       {" - "}
                       <TokenAddress
                         etherscanPrefix={network.etherscanPrefix}
                         name={name}
                         address={address}
+                        decimals={(network.decimals as {[key: string]: number})[name]}
                         ERC20={name != "NFTs"}
                       />
                     </div>
@@ -357,11 +361,13 @@ function TokenAddress({
   etherscanPrefix,
   name,
   address,
+  decimals,
   ERC20,
 }: {
   etherscanPrefix: string;
   name?: string;
   address: string;
+  decimals?: number;
   ERC20: boolean;
 }): ReactElement {
   /**
@@ -376,7 +382,7 @@ function TokenAddress({
         options: {
           address: address,
           symbol: name,
-          decimals: 18,
+          decimals: decimals ?? 18,
         },
       },
     });

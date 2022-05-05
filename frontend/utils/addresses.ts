@@ -125,6 +125,11 @@ export const ADDRESSES = [
       wETH: WETH_Arbtest.address,
       wBTC: WBTC_Arbtest.address,
     },
+    decimals: {
+      USDC: 6,
+      USDT: 6,
+      wBTC: 8
+    }
   },
   // {
   //   network: "avalanche-fuji",
