@@ -531,10 +531,10 @@
   resolved "https://registry.yarnpkg.com/@panva/asn1.js/-/asn1.js-1.0.0.tgz#dd55ae7b8129e02049f009408b97c61ccf9032f6"
   integrity sha512-UdkG3mLEqXgnlKsWanWcgb6dOjUzJ+XC5f+aWw30qrtjxeNUSfKX1cd5FBzOaXQumoe9nIqeZUvrRJS03HCCtw==
 
-"@ragetrade/sdk@^0.7.12":
-  version "0.7.12"
-  resolved "https://registry.yarnpkg.com/@ragetrade/sdk/-/sdk-0.7.12.tgz#ed1ca0ad56875e697e46f3d535fb3ce694bd65ff"
-  integrity sha512-5d3oJ8mKxlUfDJz5qQlZNhPu1wFi4BwGVCX4BXXvfxL77FzBhquPNYVrxJca7wZkBzPP2Zct9GXbeOgIc685pw==
+"@ragetrade/sdk@^0.7.13":
+  version "0.7.13"
+  resolved "https://registry.yarnpkg.com/@ragetrade/sdk/-/sdk-0.7.13.tgz#b1f5241838c0f2cda35754c956680fd7c16c3fc9"
+  integrity sha512-Zakyjrun9BIeEfyPhWjIWQsEWKyol0odNo9LfBMa7o6l+lzIEmtLVP2kvQXRx4kx5JLdlyB+duFeum4iZwc++Q==
   dependencies:
     "@uniswap/v3-sdk" "^3.8.2"
     ethers "^5.6.2"
