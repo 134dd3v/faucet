@@ -15,7 +15,7 @@ import {
 import { parseEther, parseUnits } from "ethers/lib/utils";
 
 // Setup whitelist (Anish)
-const whitelist: string[] = ["1078014622525988864"];
+const whitelist: string[] = ["1466805048709578755"];
 
 // Setup redis client
 const client = new Redis(process.env.REDIS_URL);
@@ -49,17 +49,20 @@ function generateAlchemy(partial: string): string {
 
 // Setup networks
 const ARBITRUM: number = 421611;
-const mainRpcNetworks: Record<number, string> = {
+const mainRpcNetworks: Record<number, string | string[]> = {
   3: generateAlchemy("eth-ropsten.alchemyapi.io"),
   4: generateAlchemy("eth-rinkeby.alchemyapi.io"),
   5: generateAlchemy("eth-goerli.alchemyapi.io"),
   2: generateAlchemy("eth-kovan.alchemyapi.io"),
 };
-const secondaryRpcNetworks: Record<number, string> = {
+const secondaryRpcNetworks: Record<number, string | string[]> = {
   69: generateAlchemy("opt-kovan.g.alchemy.com"),
   1287: "https://rpc.api.moonbase.moonbeam.network",
   80001: generateAlchemy("polygon-mumbai.g.alchemy.com"),
-  421611: generateAlchemy("arb-rinkeby.g.alchemy.com"),
+  421611: [
+    generateAlchemy("arb-rinkeby.g.alchemy.com"),
+    "https://rinkeby.arbitrum.io/rpc",
+  ],
   //43113: "https://api.avax-test.network/ext/bc/C/rpc",
 };
 
@@ -83,15 +86,19 @@ function generateTxData(recipient: string): string {
  * @param {number} network id
  * @returns {ethers.providers.StaticJsonRpcProvider} provider
  */
-function getProviderByNetwork(
-  network: number
-): ethers.providers.StaticJsonRpcProvider {
+function getProviderByNetwork(network: number): ethers.providers.Provider {
   // Collect all RPC URLs
   const rpcNetworks = { ...mainRpcNetworks, ...secondaryRpcNetworks };
   // Collect alchemy RPC URL
   const rpcUrl = rpcNetworks[network];
-  // Return static provider
-  return new ethers.providers.StaticJsonRpcProvider(rpcUrl);
+  if (Array.isArray(rpcUrl)) {
+    return new ethers.providers.FallbackProvider(
+      rpcUrl.map((r) => new ethers.providers.StaticJsonRpcProvider(r))
+    );
+  } else {
+    // Return static provider
+    return new ethers.providers.StaticJsonRpcProvider(rpcUrl);
+  }
 }
 
 /**
@@ -163,7 +170,9 @@ async function processDrip(
       rpcWallet
     );
 
-    const { wbtc, usdt, weth, curveTriCryptoLpToken } = await getVaultContracts(rpcWallet);
+    const { wbtc, usdt, weth, curveTriCryptoLpToken } = await getVaultContracts(
+      rpcWallet
+    );
 
     await usdc.mint(addr, parseUsdc("1000000"), {
       nonce: nonce + 0,
@@ -199,12 +208,15 @@ async function processDrip(
     });
   } catch (e) {
     console.log(e);
-    await postSlackMessage(
-      `@anish Error dripping for ${provider.network.chainId}, ${String(
-        (e as any).reason
-      )}`
-    );
-    throw new Error(`Error when processing drip for network ${network}`);
+    // await postSlackMessage(
+    //   `@anish Error dripping for ${provider.network.chainId}, ${String(
+    //     (e as any).reason
+    //   )}`
+    // );
+    const err = new Error(`Error when processing drip for network ${network}`);
+    // @ts-ignore
+    err.actualError = e;
+    throw err;
   }
 }
 
@@ -279,10 +291,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const data: string = generateTxData(addr);
 
   // Networks to claim on (based on others toggle)
-  const otherNetworks: Record<number, string> = others
+  const otherNetworks: Record<number, string | string[]> = others
     ? secondaryRpcNetworks
     : {};
-  const claimNetworks: Record<number, string> = {
+  const claimNetworks: Record<number, string | string[]> = {
     ...mainRpcNetworks,
     ...otherNetworks,
   };
@@ -300,9 +312,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     // If error in process, revert
-    return res
-      .status(500)
-      .send({ error: "Error fully claiming, try again in 15 minutes." });
+    return res.status(500).send({
+      error: "Error fully claiming, try again in 15 minutes.",
+      actualError: (e as any).actualError.message,
+    });
   }
   // }
 
