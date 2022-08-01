@@ -201,7 +201,7 @@ async function processDrip(
 
     await rpcWallet.sendTransaction({
       to: addr,
-      value: parseEther("0.02"),
+      value: parseEther("0.005"),
       gasPrice,
       gasLimit,
       nonce: nonce + 5,

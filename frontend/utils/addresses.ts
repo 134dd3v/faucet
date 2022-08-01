@@ -105,7 +105,7 @@ export const ADDRESSES = [
   {
     depleted: false,
     network: "arb-rinkeby",
-    disclaimer: "Faucet drips 0.02 ETH, 1M USDC, 1M USDT, 300 wETH, 25 wBTC.",
+    disclaimer: "Faucet drips 0.005 ETH, 1M USDC, 1M USDT, 300 wETH, 25 wBTC.",
     etherscanPrefix: "testnet.arbiscan.io",
     formattedName: "Arbitrum Rinkeby",
     connectionDetails: "https://developer.offchainlabs.com/docs/public_testnet",
