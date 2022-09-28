@@ -8,11 +8,13 @@ import { hasClaimed } from "pages/api/claim/status"; // Claim status
 import type { NextApiRequest, NextApiResponse } from "next"; // Types
 import {
   ERC20PresetMinterPauser__factory,
-  getContracts,
-  getVaultContracts,
+  // core,
+  // tricryptoVault,
+  tokens,
   parseUsdc,
+  formatUsdc,
 } from "@ragetrade/sdk";
-import { parseEther, parseUnits } from "ethers/lib/utils";
+import { formatEther, parseEther, parseUnits } from "ethers/lib/utils";
 
 // Setup whitelist (Anish)
 const whitelist: string[] = ["1466805048709578755"];
@@ -62,6 +64,10 @@ const secondaryRpcNetworks: Record<number, string | string[]> = {
   421611: [
     generateAlchemy("arb-rinkeby.g.alchemy.com"),
     "https://rinkeby.arbitrum.io/rpc",
+  ],
+  421613: [
+    generateAlchemy("arb-goerli.g.alchemy.com"),
+    "https://goerli-rollup.arbitrum.io/rpc",
   ],
   //43113: "https://api.avax-test.network/ext/bc/C/rpc",
 };
@@ -152,59 +158,53 @@ async function processDrip(
   await client.set(`nonce-${network}`, nonce + 6, "EX", 300);
 
   // Return populated transaction
+  let stage = ''
   try {
-    // await rpcWallet.sendTransaction({
-    //   to: process.env.FAUCET_ADDRESS ?? "",
-    //   from: wallet.address,
-    //   gasPrice,
-    //   // Custom gas override for Arbitrum w/ min gas limit
-    //   gasLimit: network === ARBITRUM ? 5_000_000 : 500_000,
-    //   data,
-    //   nonce,
-    //   type: 0,
-    // });
-
-    const { settlementToken } = await getContracts(rpcWallet);
-    const usdc = ERC20PresetMinterPauser__factory.connect(
-      settlementToken.address,
-      rpcWallet
-    );
-
-    const { wbtc, usdt, weth, curveTriCryptoLpToken } = await getVaultContracts(
-      rpcWallet
-    );
-
-    await usdc.mint(addr, parseUsdc("1000000"), {
+    const { usdc, wbtc, usdt, weth, crv3, sGLP } = await tokens.getContracts(rpcWallet);
+    
+    stage = 'usdc'
+    await usdc.transfer(addr, parseUsdc("1000000"), {
       nonce: nonce + 0,
       gasPrice,
     });
-
-    await usdt.mint(addr, parseUsdc("1000000"), {
+    
+    stage = 'usdt'
+    await usdt.transfer(addr, parseUsdc("1000000"), {
       nonce: nonce + 1,
       gasPrice,
     });
-
-    await weth.mint(addr, parseEther("300"), {
+    
+    stage = 'weth'
+    await usdc.attach(weth.address).transfer(addr, parseEther("300"), {
       nonce: nonce + 2,
       gasPrice,
     });
 
-    await wbtc.mint(addr, parseUnits("25", 8), {
+    stage = 'wbtc'
+    await wbtc.transfer(addr, parseUnits("25", 8), {
       nonce: nonce + 3,
       gasPrice,
     });
 
-    await curveTriCryptoLpToken.transfer(addr, parseUnits("10000", 18), {
+    stage = 'crv3'
+    await crv3.transfer(addr, parseUnits("10000", 18), {
       nonce: nonce + 4,
       gasPrice,
     });
 
+    stage = 'sGLP'
+    await sGLP.transfer(addr, parseUnits("1000", 18), {
+      nonce: nonce + 5,
+      gasPrice,
+    });
+
+    stage = 'ETH'
     await rpcWallet.sendTransaction({
       to: addr,
-      value: parseEther("0.005"),
+      value: parseEther("0.0005"),
       gasPrice,
       gasLimit,
-      nonce: nonce + 5,
+      nonce: nonce + 6,
     });
   } catch (e) {
     console.log(e);
@@ -213,7 +213,7 @@ async function processDrip(
     //     (e as any).reason
     //   )}`
     // );
-    const err = new Error(`Error when processing drip for network ${network}`);
+    const err = new Error(`Error when processing drip for network ${network}. Stage: ${stage} transfer failed.`);
     // @ts-ignore
     err.actualError = e;
     throw err;
@@ -278,10 +278,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     addr = resolvedAddress;
   }
 
-  const claimed: boolean = await hasClaimed(session.twitter_id);
+  const claimed: boolean = await hasClaimed(session.twitter_id);  
   if (claimed) {
     // Return already claimed status
-    return res.status(400).send({ error: "Already claimed in 24h window" });
+    const time = await client.ttl(session.twitter_id);
+    return res.status(400).send({ error: `Please try after ${showSecondsRemaining(time)}` });
   }
 
   // Setup wallet w/o RPC provider
@@ -303,17 +304,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // for (const networkId of Object.keys(claimNetworks)) {
   try {
     // Process faucet claims for Arbitrum Testnet
-    await processDrip(wallet, 421611, data, addr);
+    await processDrip(wallet, 421613, data, addr);
   } catch (e) {
     // If not whitelisted, force user to wait 15 minutes
     if (!whitelist.includes(session.twitter_id)) {
       // Update 24h claim status
-      await client.set(session.twitter_id, "true", "EX", 900);
+      await client.set(session.twitter_id, "true", "EX", 2 * 60);
     }
 
     // If error in process, revert
     return res.status(500).send({
-      error: "Error fully claiming, try again in 15 minutes.",
+      error: "Error fully claiming, try again in 2 minutes." + (e as any).message,
       actualError: (e as any).actualError.message,
     });
   }
@@ -327,3 +328,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   return res.status(200).send({ claimed: address });
 };
+
+export function showSecondsRemaining(input: number): string {
+  const days = Math.floor(input / 60 / 60 / 24);
+  const hours = Math.floor((input - days * 60 * 60 * 24) / 60 / 60);
+  const minutes = Math.floor((input - days * 60 * 60 * 24 - hours * 60 * 60) / 60);
+  const seconds = input - days * 60 * 60 * 24 - hours * 60 * 60 - minutes * 60;
+
+  return `${days !== 0 ? `${days} days, ` : ''}${hours !== 0 ? `${hours} hours, ` : ''}${
+    minutes !== 0 ? `${minutes} minutes and ` : ''
+  }${seconds} seconds`;
+}

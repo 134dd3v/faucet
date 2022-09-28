@@ -7,8 +7,8 @@ import { useRouter } from "next/router"; // Router
 import styles from "styles/Home.module.scss"; // Styles
 import { ReactElement, useState } from "react"; // Local state + types
 import { getAddressDetails } from "utils/addresses"; // Faucet addresses
-import { hasClaimed } from "pages/api/claim/status"; // Claim status
-import { signIn, getSession, signOut } from "next-auth/client"; // Auth
+import { getTTL, hasClaimed } from "pages/api/claim/status"; // Claim status
+import { signIn, getSession, signOut } from "next-auth/client"; // Auths
 
 /**
  * Check if a provided address is valid
@@ -46,9 +46,11 @@ export function isValidInput(address: string): boolean {
 export default function Home({
   session,
   claimed: initialClaimed,
+  ttl
 }: {
   session: any;
   claimed: boolean;
+  ttl: number;
 }) {
   // Collect prefilled address
   const {
@@ -113,8 +115,9 @@ export default function Home({
           <TokenLogo name="USDC" imageSrc="/tokens/usdc.png" />, and{" "}
           <TokenLogo name="USDT" imageSrc="/tokens/usdt.png" />
           , <TokenLogo name="wETH" imageSrc="/tokens/weth.png" />,
-          <TokenLogo name="wBTC" imageSrc="/tokens/wbtc.png" /> on Arbitrum
-          Rinkeby.
+          <TokenLogo name="wBTC" imageSrc="/tokens/wbtc.png" />,
+          <TokenLogo name="sGLP" imageSrc="/tokens/sGLP.png" /> on Arbitrum
+          Goerli.
         </span>
       </div>
 
@@ -160,8 +163,8 @@ export default function Home({
                 <div className={styles.content__claimed}>
                   <p>
                     {firstClaim
-                      ? "You have successfully claimed tokens. You can request again in 24 hours."
-                      : "You have already claimed tokens today. Please try again in 24 hours."}
+                      ? `You have successfully claimed tokens. You can request again in ${showSecondsRemaining(ttl)}.`
+                      : `You have already claimed tokens today. Please try again in ${showSecondsRemaining(ttl)}.`}
                   </p>
 
                   <input
@@ -432,6 +435,18 @@ export async function getServerSideProps(context: any) {
       session,
       // If session exists, collect claim status, else return false
       claimed: session ? await hasClaimed(session.twitter_id) : false,
+      ttl: session ? await getTTL(session.twitter_id) : 0,
     },
   };
+}
+
+export function showSecondsRemaining(input: number): string {
+  const days = Math.floor(input / 60 / 60 / 24);
+  const hours = Math.floor((input - days * 60 * 60 * 24) / 60 / 60);
+  const minutes = Math.floor((input - days * 60 * 60 * 24 - hours * 60 * 60) / 60);
+  const seconds = input - days * 60 * 60 * 24 - hours * 60 * 60 - minutes * 60;
+
+  return `${days !== 0 ? `${days} days, ` : ''}${hours !== 0 ? `${hours} hours, ` : ''}${
+    minutes !== 0 ? `${minutes} minutes and ` : ''
+  }${seconds} seconds`;
 }

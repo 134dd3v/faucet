@@ -1,8 +1,6 @@
-import USDC_Arbtest from "@ragetrade/sdk/deployments/core/arbtest/SettlementToken.json";
-import USDT_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/USDT.json";
-import WETH_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/WETH.json";
-import WBTC_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/WBTC.json";
-import Curve3Crypto_Arbtest from "@ragetrade/sdk/deployments/vaults/arbtest/CurveTriCryptoLpToken.json";
+import {tokens} from '@ragetrade/sdk'
+
+const {usdc, usdt, weth, wbtc, crv3, sGLP} = tokens.getContractsSync('arbgoerli')
 
 // Export faucet addresses
 export const ADDRESSES = [
@@ -104,28 +102,29 @@ export const ADDRESSES = [
   // },
   {
     depleted: false,
-    network: "arb-rinkeby",
-    disclaimer: "Faucet drips 0.005 ETH, 1M USDC, 1M USDT, 300 wETH, 25 wBTC.",
-    etherscanPrefix: "testnet.arbiscan.io",
-    formattedName: "Arbitrum Rinkeby",
+    network: "arb-goerli",
+    disclaimer: "Faucet drips 0.005 ETH, 1M USDC, 1M USDT, 300 wETH, 25 wBTC, 1K sGLP.",
+    etherscanPrefix: "goerli-rollup-explorer.arbitrum.io",
+    formattedName: "Arbitrum Nitro Goerli",
     connectionDetails: "https://developer.offchainlabs.com/docs/public_testnet",
     autoconnect: {
-      chainId: "0x66eeb",
-      chainName: "Arbitrum Testnet",
+      chainId: "0x66eed",
+      chainName: "Arbitrum Nitro Goerli",
       nativeCurrency: {
         name: "Ethereum",
         symbol: "ETH",
         decimals: 18,
       },
-      rpcUrls: ["https://rinkeby.arbitrum.io/rpc"],
-      blockExplorerUrls: ["https://testnet.arbiscan.io/"],
+      rpcUrls: ["https://goerli-rollup.arbitrum.io/rpc"],
+      blockExplorerUrls: ["https://goerli-rollup-explorer.arbitrum.io/"],
     },
     addresses: {
-      USDC: USDC_Arbtest.address,
-      USDT: USDT_Arbtest.address,
-      wETH: WETH_Arbtest.address,
-      wBTC: WBTC_Arbtest.address,
-      crv3crypto: Curve3Crypto_Arbtest.address,
+      USDC: usdc.address,
+      USDT: usdt.address,
+      wETH: weth.address,
+      wBTC: wbtc.address,
+      crv3crypto: crv3.address,
+      sGLP: sGLP.address
     },
     decimals: {
       USDC: 6,

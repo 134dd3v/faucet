@@ -17,6 +17,10 @@ export async function hasClaimed(twitter_id: string): Promise<boolean> {
   return resp ? true : false;
 }
 
+export async function getTTL(twitter_id: string): Promise<number> {
+  return await client.ttl(twitter_id);;
+}
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   // Collect session (force any for extra twitter params)
   const session: any = await getSession({ req });
@@ -35,3 +39,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(401).send({ error: "Not authenticated." });
   }
 };
+
+export function showSecondsRemaining(input: number): string {
+  const days = Math.floor(input / 60 / 60 / 24);
+  const hours = Math.floor((input - days * 60 * 60 * 24) / 60 / 60);
+  const minutes = Math.floor((input - days * 60 * 60 * 24 - hours * 60 * 60) / 60);
+  const seconds = input - days * 60 * 60 * 24 - hours * 60 * 60 - minutes * 60;
+
+  return `${days !== 0 ? `${days} days, ` : ''}${hours !== 0 ? `${hours} hours, ` : ''}${
+    minutes !== 0 ? `${minutes} minutes and ` : ''
+  }${seconds} seconds`;
+}
