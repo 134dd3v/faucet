@@ -1,6 +1,6 @@
 import {tokens} from '@ragetrade/sdk'
 
-const {usdc, usdt, weth, wbtc, crv3, sGLP} = tokens.getContractsSync('arbgoerli')
+const {usdc, usdt, weth, wbtc, crv3, sGLP, fsGLP} = tokens.getContractsSync('arbgoerli')
 
 // Export faucet addresses
 export const ADDRESSES = [
@@ -125,6 +125,7 @@ export const ADDRESSES = [
       wBTC: wbtc.address,
       crv3crypto: crv3.address,
       sGLP: sGLP.address
+      fsGLP: fsGLP.address
     },
     decimals: {
       USDC: 6,
