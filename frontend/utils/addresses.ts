@@ -124,7 +124,7 @@ export const ADDRESSES = [
       wETH: weth.address,
       wBTC: wbtc.address,
       crv3crypto: crv3.address,
-      sGLP: sGLP.address
+      sGLP: sGLP.address,
       fsGLP: fsGLP.address
     },
     decimals: {
