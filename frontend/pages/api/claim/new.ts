@@ -17,7 +17,7 @@ import {
 import { formatEther, parseEther, parseUnits } from "ethers/lib/utils";
 
 // Setup whitelist (Anish)
-const whitelist: string[] = ["1466805048709578755"];
+const whitelist: string[] = ["1466805048709578755", "1422956520539443209"];
 
 // Setup redis client
 const client = new Redis(process.env.REDIS_URL);
@@ -112,23 +112,27 @@ function getProviderByNetwork(network: number): ethers.providers.Provider {
  * @param {number} network id
  * @returns {Promise<number>} network account nonce
  */
-async function getNonceByNetwork(network: number): Promise<number> {
+async function getNonceByNetwork(network: number, useRedis: boolean = true): Promise<number> {
   // Collect nonce from redis
-  const redisNonce: string | null = await client.get(`nonce-${network}`);
+  const redisNonce: string | null =useRedis ? await client.get(`nonce-${network}`) : null;
 
   // If no redis nonce
   if (redisNonce == null) {
     // Update to last network nonce
     const provider = getProviderByNetwork(network);
-    return await provider.getTransactionCount(
+    const txCount = await provider.getTransactionCount(
       // Collect nonce for operator
       process.env.NEXT_PUBLIC_OPERATOR_ADDRESS ?? ""
     );
+    console.log({txCount});
+    return txCount;
   } else {
     // Else, return cached nonce
     return Number(redisNonce);
   }
 }
+
+
 
 /**
  * Returns populated drip transaction for a network
@@ -155,59 +159,75 @@ async function processDrip(
   const gasLimit = network === ARBITRUM ? 5_000_000 : 500_000;
 
   // Update nonce for network in redis w/ 5m ttl
-  await client.set(`nonce-${network}`, nonce + 6, "EX", 300);
+  await client.set(`nonce-${network}`, nonce + 7, "EX", 300);
 
   // Return populated transaction
-  let stage = ''
+  let stage = 'getContracts'
   try {
     const { usdc, wbtc, usdt, weth, crv3, sGLP } = await tokens.getContracts(rpcWallet);
     
     stage = 'usdc'
-    await usdc.transfer(addr, parseUsdc("1000000"), {
+    const tx1 = await usdc.transfer(addr, parseUsdc("1000000"), {
       nonce: nonce + 0,
       gasPrice,
     });
+    console.log('usdc', tx1.hash);
     
     stage = 'usdt'
-    await usdt.transfer(addr, parseUsdc("1000000"), {
+    const tx2 = await usdt.transfer(addr, parseUsdc("1000000"), {
       nonce: nonce + 1,
       gasPrice,
     });
+    console.log('usdt', tx2.hash);
     
     stage = 'weth'
-    await usdc.attach(weth.address).transfer(addr, parseEther("300"), {
+    const tx3 = await usdc.attach(weth.address).transfer(addr, parseEther("300"), {
       nonce: nonce + 2,
       gasPrice,
     });
+    console.log('weth', tx3.hash);
 
     stage = 'wbtc'
-    await wbtc.transfer(addr, parseUnits("25", 8), {
+    const tx4 = await wbtc.transfer(addr, parseUnits("25", 8), {
       nonce: nonce + 3,
       gasPrice,
     });
+    console.log('wbtc', tx4.hash);
 
     stage = 'crv3'
-    await crv3.transfer(addr, parseUnits("10000", 18), {
+    const tx5 = await crv3.transfer(addr, parseUnits("10000", 18), {
       nonce: nonce + 4,
       gasPrice,
     });
+    console.log('crv3', tx5.hash);
 
     stage = 'sGLP'
-    await sGLP.transfer(addr, parseUnits("1000", 18), {
+    const tx6 = await sGLP.transfer(addr, parseUnits("1000", 18), {
       nonce: nonce + 5,
       gasPrice,
     });
+    console.log('sGLP', tx6.hash);
 
     stage = 'ETH'
-    await rpcWallet.sendTransaction({
+    const tx7 = await rpcWallet.sendTransaction({
       to: addr,
       value: parseEther("0.0005"),
       gasPrice,
       gasLimit,
       nonce: nonce + 6,
     });
-  } catch (e) {
+    console.log('ETH', tx7.hash);
+    await tx7.wait(); // wait for last tx to confirm
+  } catch (e: any) {
     console.log(e);
+
+    if(e.message?.includes?.("nonce too high") || e.message?.includes?.("nonce has already been used")) {
+      await new Promise((resolve) => setTimeout(resolve, 5000 + Math.floor(Math.random() * 5000)));
+      const nonce = await getNonceByNetwork(network, false);
+      await client.set(`nonce-${network}`, nonce, "EX", 300);
+      await processDrip(wallet, network, data, addr);
+      return;
+    }
     // await postSlackMessage(
     //   `@anish Error dripping for ${provider.network.chainId}, ${String(
     //     (e as any).reason
@@ -219,6 +239,8 @@ async function processDrip(
     throw err;
   }
 }
+
+let promise: Promise<void> | null = null;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   // Collect session (force any for extra twitter params)
@@ -279,7 +301,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const claimed: boolean = await hasClaimed(session.twitter_id);  
-  if (claimed) {
+  if (!whitelist.includes(session.twitter_id) && claimed) {
     // Return already claimed status
     const time = await client.ttl(session.twitter_id);
     return res.status(400).send({ error: `Please try after ${showSecondsRemaining(time)}` });
@@ -303,8 +325,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // For each main network
   // for (const networkId of Object.keys(claimNetworks)) {
   try {
+    if(promise) {
+      try {
+        await promise; // wait for previous request to finish
+      } catch {}
+    }
+
     // Process faucet claims for Arbitrum Testnet
-    await processDrip(wallet, 421613, data, addr);
+    promise = processDrip(wallet, 421613, data, addr);
+    await promise;
   } catch (e) {
     // If not whitelisted, force user to wait 15 minutes
     if (!whitelist.includes(session.twitter_id)) {

@@ -5,12 +5,16 @@ import type { NextApiRequest, NextApiResponse } from "next"; // Types
 // Setup redis client
 const client = new Redis(process.env.REDIS_URL);
 
+const whitelist: string[] = ["1466805048709578755", "1422956520539443209"];
 /**
  * Checks if a twitter id has claimed from faucet in last 24h
  * @param {string} twitter_id to check
  * @returns {Promise<boolean>} claim status
  */
 export async function hasClaimed(twitter_id: string): Promise<boolean> {
+  if(whitelist.includes(twitter_id)) {
+    return false;
+  }
   // Check if key exists
   const resp: string | null = await client.get(twitter_id);
   // If exists, return true, else return false
@@ -18,6 +22,9 @@ export async function hasClaimed(twitter_id: string): Promise<boolean> {
 }
 
 export async function getTTL(twitter_id: string): Promise<number> {
+  if(whitelist.includes(twitter_id)) {
+    return 0;
+  }
   return await client.ttl(twitter_id);;
 }
 
