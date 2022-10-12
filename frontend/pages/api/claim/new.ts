@@ -211,7 +211,7 @@ async function processDrip(
     stage = 'ETH'
     const tx7 = await rpcWallet.sendTransaction({
       to: addr,
-      value: parseEther("0.0005"),
+      value: parseEther("0.003"),
       gasPrice,
       gasLimit,
       nonce: nonce + 6,

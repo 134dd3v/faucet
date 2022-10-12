@@ -103,7 +103,7 @@ export const ADDRESSES = [
   {
     depleted: false,
     network: "arb-goerli",
-    disclaimer: "Faucet drips 0.005 ETH, 1M USDC, 1M USDT, 300 wETH, 25 wBTC, 1K sGLP.",
+    disclaimer: "Faucet drips 0.003 ETH, 1M USDC, 1M USDT, 300 wETH, 25 wBTC, 1K crv3, 1K sGLP.",
     etherscanPrefix: "goerli-rollup-explorer.arbitrum.io",
     formattedName: "Arbitrum Nitro Goerli",
     connectionDetails: "https://developer.offchainlabs.com/docs/public_testnet",
