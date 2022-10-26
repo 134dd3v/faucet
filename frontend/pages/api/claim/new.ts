@@ -156,7 +156,7 @@ async function processDrip(
   // Collect gas price * 2 for network
   const gasPrice = (await provider.getGasPrice()).mul(2);
 
-  const gasLimit = network === ARBITRUM ? 5_000_000 : 500_000;
+  const gasLimit = 10_000_000;
 
   // Update nonce for network in redis w/ 5m ttl
   await client.set(`nonce-${network}`, nonce + 7, "EX", 300);
@@ -170,6 +170,7 @@ async function processDrip(
     const tx1 = await usdc.transfer(addr, parseUsdc("1000000"), {
       nonce: nonce + 0,
       gasPrice,
+      gasLimit,
     });
     console.log('usdc', tx1.hash);
     
@@ -177,6 +178,7 @@ async function processDrip(
     const tx2 = await usdt.transfer(addr, parseUsdc("1000000"), {
       nonce: nonce + 1,
       gasPrice,
+      gasLimit,
     });
     console.log('usdt', tx2.hash);
     
@@ -184,6 +186,7 @@ async function processDrip(
     const tx3 = await usdc.attach(weth.address).transfer(addr, parseEther("300"), {
       nonce: nonce + 2,
       gasPrice,
+      gasLimit,
     });
     console.log('weth', tx3.hash);
 
@@ -191,6 +194,7 @@ async function processDrip(
     const tx4 = await wbtc.transfer(addr, parseUnits("25", 8), {
       nonce: nonce + 3,
       gasPrice,
+      gasLimit,
     });
     console.log('wbtc', tx4.hash);
 
@@ -198,6 +202,7 @@ async function processDrip(
     const tx5 = await crv3.transfer(addr, parseUnits("10000", 18), {
       nonce: nonce + 4,
       gasPrice,
+      gasLimit,
     });
     console.log('crv3', tx5.hash);
 
@@ -205,6 +210,7 @@ async function processDrip(
     const tx6 = await sGLP.transfer(addr, parseUnits("1000", 18), {
       nonce: nonce + 5,
       gasPrice,
+      gasLimit,
     });
     console.log('sGLP', tx6.hash);
 
